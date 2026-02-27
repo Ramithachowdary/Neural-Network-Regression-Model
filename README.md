@@ -1,52 +1,41 @@
 # Developing a Neural Network Regression Model
 
 ## AIM
+To develop a neural network regression model for the given dataset.
 
-To develop a Neural Network–based regression model for predicting the spending score of customers using the given dataset.
+## Problem Statement and Dataset
+The dataset contains customer information including Age and Spending Score. The goal is to predict the Spending Score of a customer based on their Age using a Neural Network Regression Model. Since the Spending Score is a continuous numerical value assigned based on customer purchasing behavior, this is treated as a regression problem. A feedforward neural network is used to learn the non-linear relationship between Age and Spending Score, trained using MSE loss and RMSprop optimizer, and evaluated on unseen test data to measure generalization.
 
-## THEORY
-```
-Problem Statement Explanation:
-
-An automobile company wants to understand customer behavior based on demographic features such as Age.
-The Spending Score represents how actively a customer spends money. Predicting this score helps the company:
--Analyze customer purchasing behavior
--Design personalized offers
--Improve marketing strategies
-Since the output (Spending Score) is a continuous numerical value, the problem is treated as a regression problem.
-A Neural Network Regression Model is used to learn the relationship between age and spending score.
-```
 ## Neural Network Model
 <img width="1134" height="647" alt="418446260-84093ee0-48a5-4bd2-b78d-5d8ee258d189" src="https://github.com/user-attachments/assets/f9a07d0f-c01e-4a3b-9ac3-bd8751e0f6cc" />
 
 ## DESIGN STEPS
 
 ### STEP 1: Loading the Dataset
-The customer dataset is loaded using the Pandas library.
+The customer dataset is loaded using the Pandas library and the Age column is used as input while Spending Score is used as the target variable.
 
 ### STEP 2: Splitting the Dataset
-The dataset is split into training data and testing data to evaluate model performance.
+The dataset is split into training and testing sets using an 67-33 ratio to evaluate model performance on unseen data.
 
 ### STEP 3: Data Scaling
-MinMaxScaler is used to normalize the input values between 0 and 1.
+MinMaxScaler is applied to normalize the input Age values between 0 and 1 to improve training stability.
 
 ### STEP 4: Building the Neural Network Model
-A feedforward neural network is created using PyTorch with linear layers and ReLU activation.
+A feedforward neural network is built using PyTorch with two hidden layers of size 8 and 10 neurons respectively, using ReLU activation functions and a single output neuron for regression.
 
 ### STEP 5: Training the Model
-The model is trained using Mean Squared Error loss and RMSprop optimizer.
+The model is trained for 2000 epochs using Mean Squared Error loss and RMSprop optimizer with a learning rate of 0.001.
 
 ### STEP 6: Plotting the Performance
-Training loss is plotted against epochs to visualize learning behavior.
+Training loss is recorded at each epoch and plotted against iterations to visualize the learning behavior and convergence.
 
 ### STEP 7: Model Evaluation
-The trained model is evaluated using test data and test loss is calculated.
+The trained model is evaluated on the test set and test loss is printed. A new sample input is passed through the model to generate a predicted Spending Score.
 
 ## PROGRAM
 
-### Name: Ramitha chowdary S
+### Name: Ramitha Chowdary S
 ### Register Number: 212224240130
-
 ```python
 import torch
 import torch.nn as nn
@@ -120,6 +109,8 @@ with torch.no_grad():
     print(f"Test Loss: {test_loss.item():.6f}")
 
 # Plot Loss
+print('Name: Ramitha Chowdary S')
+print('Register Number: 212224240130')
 loss_df = pd.DataFrame(ai_brain.history)
 loss_df.plot()
 plt.xlabel("Epochs")
@@ -128,12 +119,21 @@ plt.title("Training Loss vs Epochs")
 plt.show()
 
 # New Sample Prediction
-X_new = torch.tensor([[9]], dtype=torch.float32)
+print('Name: Ramitha Chowdary S')
+print('Register Number: 212224240130')
+
+X_new = torch.tensor([[30]], dtype=torch.float32)
 X_new_scaled = torch.tensor(scaler.transform(X_new), dtype=torch.float32)
 
-prediction = ai_brain(X_new_scaled).item()
-print(f"Predicted Spending Score: {prediction}")
+with torch.no_grad():
+    prediction = ai_brain(X_new_scaled).item()
+
+print(f"Input Age: 30")
+print(f"Predicted Spending Score: {prediction:.2f}")
 ```
+
+## OUTPUT
+
 ## Dataset Information
 
 <img width="954" height="669" alt="image" src="https://github.com/user-attachments/assets/1cb1b3fe-aa46-4899-b50b-3572dadcd3e2" />
@@ -141,13 +141,11 @@ print(f"Predicted Spending Score: {prediction}")
 ## OUTPUT
 
 ### Training Loss Vs Iteration Plot
-<img width="601" height="595" alt="image" src="https://github.com/user-attachments/assets/0e379cd1-b1bf-47f4-9afe-14095a54caba" />
+<img width="489" height="570" alt="image" src="https://github.com/user-attachments/assets/7ae84479-d109-4114-9ca7-60eb458c01b6" />
 
 ### New Sample Data Prediction
-<img width="613" height="243" alt="image" src="https://github.com/user-attachments/assets/49251c6c-7e0c-4070-8c12-a58ff673ab3e" />
+<img width="232" height="65" alt="image" src="https://github.com/user-attachments/assets/e2f3509d-07aa-4060-b553-b06b21d0d8e7" />
 
-<img width="715" height="97" alt="image" src="https://github.com/user-attachments/assets/907fac51-67e8-45f2-a8ed-c99c174fd495" />
 
 ## RESULT
-
-The neural network regression model was successfully trained and evaluated. The model demonstrated strong predictive performance on unseen data, with a low error rate.
+The neural network regression model was successfully developed and trained on the customers dataset. The model learned to predict the Spending Score from the Age feature with decreasing training loss over 2000 epochs, confirming effective learning. The test loss validated the model's ability to generalize to unseen data and the sample prediction produced a reasonable Spending Score for the given input age.
