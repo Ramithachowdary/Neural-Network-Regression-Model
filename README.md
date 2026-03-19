@@ -48,8 +48,12 @@ import matplotlib.pyplot as plt
 # Load Dataset
 dataset1 = pd.read_csv('customers.csv')
 
+# Numeric input: Age
 X = dataset1[['Age']].values
-y = dataset1[['Spending_Score']].values
+
+# Numeric output: Spending_Score mapped to numbers
+spending_score_mapping = {'Low': 0, 'Average': 1, 'High': 2}
+y = dataset1['Spending_Score'].map(spending_score_mapping).values.reshape(-1, 1)
 
 # Train-Test Split
 X_train, X_test, y_train, y_test = train_test_split(
@@ -67,7 +71,8 @@ y_train_tensor = torch.tensor(y_train, dtype=torch.float32)
 X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
 y_test_tensor = torch.tensor(y_test, dtype=torch.float32)
 
-# Neural Network Model
+# Name: Ramitha Chowdary S
+# Register Number: 212224240130
 class NeuralNet(nn.Module):
     def __init__(self):
         super().__init__()
@@ -83,12 +88,12 @@ class NeuralNet(nn.Module):
         x = self.fc3(x)
         return x
 
-# Initialize Model, Loss and Optimizer
+# Name: Ramitha Chowdary S
+# Register Number: 212224240130
 ai_brain = NeuralNet()
 criterion = nn.MSELoss()
 optimizer = optim.RMSprop(ai_brain.parameters(), lr=0.001)
 
-# Training Function
 def train_model(ai_brain, X_train, y_train, criterion, optimizer, epochs=2000):
     for epoch in range(epochs):
         optimizer.zero_grad()
@@ -98,24 +103,21 @@ def train_model(ai_brain, X_train, y_train, criterion, optimizer, epochs=2000):
         ai_brain.history['loss'].append(loss.item())
 
         if epoch % 200 == 0:
-            print(f"Epoch [{epoch}/{epochs}], Loss: {loss.item():.6f}")
+            print(f'Epoch [{epoch}/{epochs}], Loss: {loss.item():.6f}')
 
-# Train the Model
 train_model(ai_brain, X_train_tensor, y_train_tensor, criterion, optimizer)
 
-# Test Evaluation
 with torch.no_grad():
     test_loss = criterion(ai_brain(X_test_tensor), y_test_tensor)
-    print(f"Test Loss: {test_loss.item():.6f}")
+    print(f'Test Loss: {test_loss.item():.6f}')
 
-# Plot Loss
-print('Name: Ramitha Chowdary S')
-print('Register Number: 212224240130')
+# Name: Ramitha Chowdary S
+# Register Number: 212224240130
 loss_df = pd.DataFrame(ai_brain.history)
 loss_df.plot()
 plt.xlabel("Epochs")
 plt.ylabel("Loss")
-plt.title("Training Loss vs Epochs")
+plt.title("Training Loss vs Iterations")
 plt.show()
 
 # New Sample Prediction
@@ -128,8 +130,17 @@ X_new_scaled = torch.tensor(scaler.transform(X_new), dtype=torch.float32)
 with torch.no_grad():
     prediction = ai_brain(X_new_scaled).item()
 
-print(f"Input Age: 30")
-print(f"Predicted Spending Score: {prediction:.2f}")
+# Map back to label
+if prediction < 0.5:
+    label = 'Low'
+elif prediction < 1.5:
+    label = 'Average'
+else:
+    label = 'High'
+
+print(f'Input Age: 30')
+print(f'Predicted Spending Score (numeric): {prediction:.2f}')
+print(f'Predicted Spending Score (label): {label}')
 ```
 
 ## OUTPUT
@@ -140,11 +151,8 @@ print(f"Predicted Spending Score: {prediction:.2f}")
 
 ## OUTPUT
 
-### Training Loss Vs Iteration Plot
-<img width="489" height="570" alt="image" src="https://github.com/user-attachments/assets/7ae84479-d109-4114-9ca7-60eb458c01b6" />
-
-### New Sample Data Prediction
-<img width="232" height="65" alt="image" src="https://github.com/user-attachments/assets/e2f3509d-07aa-4060-b553-b06b21d0d8e7" />
+### Training Loss Vs Iteration Plot & New Sample Data Prediction
+<img width="621" height="740" alt="image" src="https://github.com/user-attachments/assets/9726a936-0506-43c3-87fa-0aeb131348a3" />
 
 
 ## RESULT
